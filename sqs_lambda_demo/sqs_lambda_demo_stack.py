@@ -20,6 +20,16 @@ class SqsLambdaDemoStack(Stack):
         )
 
         # Create our lambda Function
+        sqs_lambda = lambda_.Function(self, "SQSLambda",
+                                      handler='lambda_handler.handler',
+                                      runtime=lambda_.Runtime.PYTHON_3_10,
+                                      code=lambda_.Code.from_asset('lambda')  
+                                     )
         
+        # Create our event source
+        sqs_event_source = lambda_event_sources.SqsEventSource(queue)
+
+        # Add SQS event source to Lambda
+        sqs_lambda.add_event_source(sqs_event_source)
 
         
